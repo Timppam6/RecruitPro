@@ -1,0 +1,118 @@
+{
+  "project_overview": {
+    "name": "Professional Job Recruitment Platform",
+    "type": "No-Code/Low-Code Web Application",
+    "theme": "Dark Mode with Orange Accents",
+    "target_platforms": ["Bubble.io", "Adalo", "Webflow", "FlutterFlow"]
+  },
+  "database_schema": {
+    "users": {
+      "fields": [
+        {"name": "id", "type": "string", "primary_key": true},
+        {"name": "email", "type": "string", "unique": true, "required": true},
+        {"name": "password", "type": "string", "encrypted": true, "required": true},
+        {"name": "company_id", "type": "string", "foreign_key": "companies.id"},
+        {"name": "plan_tier", "type": "string", "enum": ["basic", "pro", "enterprise"]},
+        {"name": "created_at", "type": "datetime"},
+        {"name": "is_active", "type": "boolean", "default": true}
+      ]
+    },
+    "companies": {
+      "fields": [
+        {"name": "id", "type": "string", "primary_key": true},
+        {"name": "name", "type": "string", "required": true},
+        {"name": "description", "type": "text"},
+        {"name": "employer_id", "type": "string", "foreign_key": "users.id"},
+        {"name": "created_at", "type": "datetime"},
+        {"name": "is_active", "type": "boolean", "default": true}
+      ]
+    },
+    "job_postings": {
+      "fields": [
+        {"name": "id", "type": "string", "primary_key": true},
+        {"name": "title", "type": "string", "required": true},
+        {"name": "description", "type": "text", "required": true},
+        {"name": "company_id", "type": "string", "foreign_key": "companies.id"},
+        {"name": "share_link", "type": "string", "unique": true},
+        {"name": "created_at", "type": "datetime"},
+        {"name": "is_active", "type": "boolean", "default": true},
+        {"name": "application_count", "type": "number", "default": 0}
+      ]
+    },
+    "applications": {
+      "fields": [
+        {"name": "id", "type": "string", "primary_key": true},
+        {"name": "job_posting_id", "type": "string", "foreign_key": "job_postings.id"},
+        {"name": "candidate_name", "type": "string", "required": true},
+        {"name": "candidate_email", "type": "string", "required": true},
+        {"name": "status", "type": "string", "enum": ["pending", "reviewing", "accepted", "rejected"]},
+        {"name": "applied_at", "type": "datetime"},
+        {"name": "webhook_triggered", "type": "boolean", "default": false}
+      ]
+    }
+  },
+  "pricing_plans": {
+    "basic": {
+      "price": 60,
+      "currency": "USD",
+      "interval": "month",
+      "features": [
+        "Up to 5 job postings",
+        "Basic company profile",
+        "Email support",
+        "Standard application forms"
+      ]
+    },
+    "pro": {
+      "price": 200,
+      "currency": "USD",
+      "interval": "month",
+      "features": [
+        "Up to 25 job postings",
+        "Enhanced company profile",
+        "Priority email support",
+        "Custom application forms",
+        "Basic analytics"
+      ]
+    },
+    "enterprise": {
+      "price": 500,
+      "currency": "USD",
+      "interval": "month",
+      "features": [
+        "Unlimited job postings",
+        "Premium company profile",
+        "Phone & email support",
+        "Advanced analytics",
+        "Custom integrations",
+        "API access"
+      ]
+    }
+  },
+  "ui_components": {
+    "theme": {
+      "dark_mode": {
+        "background": "#000000",
+        "surface": "#0a0a0a",
+        "primary_text": "#ffffff",
+        "secondary_text": "#b3b3b3",
+        "orange_accent": "#ff6b35",
+        "orange_variants": ["#ff8c42", "#ff5722", "#e64a19"]
+      }
+    },
+    "orange_elements": [
+      "Corner splat decorations",
+      "Button hover dots",
+      "Loading spinners",
+      "Success indicators",
+      "Form field accents",
+      "Navigation highlights"
+    ]
+  },
+  "integrations": {
+    "payment_processor": "Stripe",
+    "webhook_handler": "n8n",
+    "database": "PostgreSQL",
+    "authentication": "JWT/Custom Auth System"
+  }
+}

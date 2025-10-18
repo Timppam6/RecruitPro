@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Senior Software Engineer - TechCorp Inc.</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #000000;
+            --bg-surface: #0a0a0a;
+            --text-primary: #ffffff;
+            --text-secondary: #b3b3b3;
+            --orange-primary: #ff6b35;
+            --orange-secondary: #ff8c42;
+            --orange-tertiary: #ff5722;
+            --border-color: rgba(255, 107, 53, 0.2);
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .orange-splat {
+            position: absolute;
+            background: var(--orange-primary);
+            border-radius: 50% 30% 60% 40%;
+            opacity: 0.08;
+            pointer-events: none;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .orange-dot {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: var(--orange-secondary);
+            border-radius: 50%;
+            opacity: 0.7;
+        }
+
+        .form-container {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .form-container:hover {
+            border-color: var(--orange-primary);
+            box-shadow: 0 0 30px rgba(255, 107, 53, 0.1);
+        }
+
+        .input-field {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .input-field:focus {
+            border-color: var(--orange-primary);
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+            outline: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--orange-primary), var(--orange-tertiary));
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 107, 53, 0.3);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--orange-primary);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-15px) rotate(3deg); }
+            66% { transform: translateY(8px) rotate(-2deg); }
+        }
+
+        .success-message {
+            background: rgba(76, 175, 80, 0.1);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+            color: #4caf50;
+        }
+
+        .error-message {
+            background: rgba(244, 67, 54, 0.1);
+            border: 1px solid rgba(244, 67, 54, 0.3);
+            color: #f44336;
+        }
+
+        .job-card {
+            background: var(--bg-surface);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .company-logo {
+            background: linear-gradient(135deg, var(--orange-primary), var(--orange-tertiary));
+        }
+    </style>
+</head>
+<body class="min-h-screen p-4">
+    <!-- Decorative elements -->
+    <div class="orange-splat w-32 h-32 top-20 left-10"></div>
+    <div class="orange-splat w-24 h-24 bottom-32 right-16"></div>
+    <div class="orange-dot top-1/4 left-1/4"></div>
+    <div class="orange-dot bottom-1/3 right-1/3"></div>
+
+    <div class="max-w-4xl mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <div class="flex items-center justify-center space-x-2 mb-4">
+                <div class="w-12 h-12 company-logo rounded-lg flex items-center justify-center text-white font-bold text-lg">
+                    T
+                </div>
+                <span class="text-2xl font-bold">TechCorp Inc.</span>
+            </div>
+            <h1 class="text-3xl font-bold mb-2">Senior Software Engineer</h1>
+            <p class="text-gray-400">Join our innovative team and help build the future of technology</p>
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-8">
+            <!-- Job Details -->
+            <div class="lg:col-span-1">
+                <div class="job-card p-6 rounded-xl mb-6">
+                    <h2 class="text-xl font-semibold mb-4">Job Details</h2>
+
+                    <div class="space-y-4">
+                        <div class="flex items-center space-x-3">
+                            <svg class="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                            <div>
+                                <p class="font-medium">Location</p>
+                                <p class="text-gray-400 text-sm">San Francisco, CA</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center space-x-3">
+                            <svg class="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                            </svg>
+                            <div>
+                                <p class="font-medium">Salary</p>
+                                <p class="text-gray-400 text-sm">$120,000 - $180,000</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center space-x-3">
+                            <svg class="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V8a2 2 0 012-2V6"></path>
+                            </svg>
+                            <div>
+                                <p class="font-medium">Job Type</p>
+                                <p class="text-gray-400 text-sm">Full-time</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center space-x-3">
+                            <svg class="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3a2 2 0 012-2h4a2 2 0 012 2v4m-6 9l6-6m0 0v6m0-6h-6"></path>
+                            </svg>
+                            <div>
+                                <p class="font-medium">Posted</p>
+                                <p class="text-gray-400 text-sm">2 days ago</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Company Info -->
+                <div class="job-card p-6 rounded-xl">
+                    <h2 class="text-xl font-semibold mb-4">About TechCorp Inc.</h2>
+                    <p class="text-gray-400 text-sm mb-4">
+                        TechCorp Inc. is a leading technology company focused on building innovative solutions
+                        that shape the future. We're a team of passionate engineers, designers, and thinkers
+                        working together to solve complex problems.
+                    </p>
+
+                    <div class="space-y-2 text-sm text-gray-400">
+                        <div class="flex items-center space-x-2">
+                            <span class="w-2 h-2 bg-orange-400 rounded-full"></span>
+                            <span>500+ employees</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="w-2 h-2 bg-orange-400 rounded-full"></span>
+                            <span>Series C funded</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="w-2 h-2 bg-orange-400 rounded-full"></span>
+                            <span>Remote-first culture</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Application Form -->
+            <div class="lg:col-span-2">
+                <div class="form-container p-8 rounded-xl">
+                    <h2 class="text-2xl font-semibold mb-6">Apply for this position</h2>
+
+                    <form id="applicationForm" class="space-y-6">
+                        <!-- Alert Messages -->
+                        <div id="alertMessage" class="hidden p-4 rounded-lg text-sm"></div>
+
+                        <!-- Personal Information -->
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="firstName" class="block text-sm font-medium mb-2">First Name *</label>
+                                <input
+                                    type="text"
+                                    id="firstName"
+                                    name="firstName"
+                                    required
+                                    class="input-field w-full px-4 py-3 rounded-lg text-white placeholder-gray-400"
+                                    placeholder="John"
+                                >
+                            </div>
+                            <div>
+                                <label for="lastName" class="block text-sm font-medium mb-2">Last Name *</label>
+                                <input
+                                    type="text"
+                                    id="lastName"
+                                    name="lastName"
+                                    required
+                                    class="input-field w-full px-4 py-3 rounded-lg text-white placeholder-gray-400"
+                                    placeholder="Doe"
+                                >
+                            </div>
+                        </div>
+
+                        <!-- Email -->
+                        <div>
+                            <label for="email" class="block text-sm font-medium mb-2">Email Address *</label>
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                required
+                                class="input-field w-full px-4 py-3 rounded-lg text-white placeholder-gray-400"
+                                placeholder="john@example.com"
+                            >
+                        </div>
+
+                        <!-- Phone -->
+                        <div>
+                            <label for="phone" class="block text-sm font-medium mb-2">Phone Number</label>
+                            <input
+                                type="tel"
+                                id="phone"
+                                name="phone"
+                                class="input-field w-full px-4 py-3 rounded-lg text-white placeholder-gray-400"
+                                placeholder="+1 (555) 123-4567"
+                            >
+                        </div>
+
+                        <!-- Resume Upload -->
+                        <div>
+                            <label for="resume" class="block text-sm font-medium mb-2">Resume/CV *</label>
+                            <div class="border-2 border-dashed border-gray-600 rounded-lg p-6 text-center hover:border-orange-400 transition-colors">
+                                <input
+                                    type="file"
+                                    id="resume"
+                                    name="resume"
+                                    accept=".pdf,.doc,.docx"
+                                    class="hidden"
+                                >
+                                <div id="uploadArea" class="cursor-pointer">
+                                    <svg class="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                                    </svg>
+                                    <p class="text-gray-400 mb-2">Click to upload or drag and drop</p>
+                                    <p class="text-sm text-gray-500">PDF, DOC, DOCX (max 10MB)</p>
+                                    <p id="fileName" class="text-orange-400 text-sm mt-2 hidden"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cover Letter -->
+                        <div>
+                            <label for="coverLetter" class="block text-sm font-medium mb-2">Cover Letter</label>
+                            <textarea
+                                id="coverLetter"
+                                name="coverLetter"
+                                rows="6"
+                                class="input-field w-full px-4 py-3 rounded-lg text-white placeholder-gray-400 resize-none"
+                                placeholder="Tell us why you're interested in this position and what makes you a great fit..."
+                            ></textarea>
+                        </div>
+
+                        <!-- LinkedIn -->
+                        <div>
+                            <label for="linkedin" class="block text-sm font-medium mb-2">LinkedIn Profile</label>
+                            <input
+                                type="url"
+                                id="linkedin"
+                                name="linkedin"
+                                class="input-field w-full px-4 py-3 rounded-lg text-white placeholder-gray-400"
+                                placeholder="https://linkedin.com/in/yourprofile"
+                            >
+                        </div>
+
+                        <!-- Portfolio -->
+                        <div>
+                            <label for="portfolio" class="block text-sm font-medium mb-2">Portfolio Website</label>
+                            <input
+                                type="url"
+                                id="portfolio"
+                                name="portfolio"
+                                class="input-field w-full px-4 py-3 rounded-lg text-white placeholder-gray-400"
+                                placeholder="https://yourportfolio.com"
+                            >
+                        </div>
+
+                        <!-- Work Authorization -->
+                        <div>
+                            <label class="flex items-start">
+                                <input type="checkbox" id="workAuth" name="workAuth" required class="mt-1 mr-2 rounded border-gray-600 text-orange-500 focus:ring-orange-500">
+                                <span class="text-sm text-gray-300">
+                                    I am authorized to work in the United States *
+                                </span>
+                            </label>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button
+                            type="submit"
+                            id="submitBtn"
+                            class="btn-primary w-full py-4 rounded-lg text-white font-semibold text-lg flex items-center justify-center"
+                        >
+                            <span id="buttonText">Submit Application</span>
+                            <span id="loadingSpinner" class="loading-spinner hidden ml-2"></span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // File upload handling
+        const resumeInput = document.getElementById('resume');
+        const uploadArea = document.getElementById('uploadArea');
+        const fileName = document.getElementById('fileName');
+
+        uploadArea.addEventListener('click', () => resumeInput.click());
+
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('border-orange-400', 'bg-orange-500', 'bg-opacity-5');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('border-orange-400', 'bg-orange-500', 'bg-opacity-5');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('border-orange-400', 'bg-orange-500', 'bg-opacity-5');
+
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                resumeInput.files = files;
+                fileName.textContent = files[0].name;
+                fileName.classList.remove('hidden');
+            }
+        });
+
+        resumeInput.addEventListener('change', () => {
+            if (resumeInput.files.length > 0) {
+                fileName.textContent = resumeInput.files[0].name;
+                fileName.classList.remove('hidden');
+            }
+        });
+
+        // Form submission
+        document.getElementById('applicationForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const submitBtn = document.getElementById('submitBtn');
+            const buttonText = document.getElementById('buttonText');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const alertMessage = document.getElementById('alertMessage');
+
+            // Show loading state
+            submitBtn.disabled = true;
+            buttonText.textContent = 'Submitting Application...';
+            loadingSpinner.classList.remove('hidden');
+
+            // Hide previous alerts
+            alertMessage.classList.add('hidden');
+
+            const formData = new FormData(this);
+            const applicationData = {
+                firstName: formData.get('firstName'),
+                lastName: formData.get('lastName'),
+                email: formData.get('email'),
+                phone: formData.get('phone'),
+                coverLetter: formData.get('coverLetter'),
+                linkedin: formData.get('linkedin'),
+                portfolio: formData.get('portfolio'),
+                workAuth: formData.get('workAuth') === 'on',
+                resume: formData.get('resume')
+            };
+
+            try {
+                // Simulate API call to n8n webhook
+                await new Promise(resolve => setTimeout(resolve, 2000));
+
+                // Success
+                alertMessage.textContent = 'Application submitted successfully! We\'ll be in touch soon.';
+                alertMessage.classList.remove('hidden', 'error-message');
+                alertMessage.classList.add('success-message');
+
+                // Reset form
+                this.reset();
+                fileName.classList.add('hidden');
+
+                setTimeout(() => {
+                    window.location.href = 'application-success.html';
+                }, 1500);
+
+            } catch (error) {
+                // Error
+                alertMessage.textContent = error.message || 'Failed to submit application. Please try again.';
+                alertMessage.classList.remove('hidden', 'success-message');
+                alertMessage.classList.add('error-message');
+
+                // Reset button
+                submitBtn.disabled = false;
+                buttonText.textContent = 'Submit Application';
+                loadingSpinner.classList.add('hidden');
+            }
+        });
+
+        // Floating animation for decorative elements
+        document.addEventListener('DOMContentLoaded', function() {
+            const splats = document.querySelectorAll('.orange-splat');
+            const dots = document.querySelectorAll('.orange-dot');
+
+            splats.forEach((splat, index) => {
+                splat.style.animationDelay = `${index * 0.5}s`;
+            });
+
+            dots.forEach((dot, index) => {
+                dot.style.animationDelay = `${index * 0.3}s`;
+                dot.style.animation = 'float 6s ease-in-out infinite';
+            });
+        });
+    </script>
+</body>
+</html>

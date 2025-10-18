@@ -1,0 +1,287 @@
+{
+  "n8n_webhook_configuration": {
+    "description": "Webhook configuration for RecruitPro application processing with n8n",
+    "version": "1.0.0",
+    "webhooks": {
+      "application_received": {
+        "name": "Application Received",
+        "description": "Triggered when a candidate submits a job application",
+        "path": "/webhook/application-received",
+        "method": "POST",
+        "headers": {
+          "Content-Type": "application/json",
+          "X-RecruitPro-Signature": "webhook_signature_verification"
+        },
+        "payload_structure": {
+          "event": "application.submitted",
+          "timestamp": "ISO8601_timestamp",
+          "data": {
+            "application": {
+              "id": "string",
+              "job_posting_id": "string",
+              "candidate_email": "string",
+              "candidate_first_name": "string",
+              "candidate_last_name": "string",
+              "candidate_phone": "string",
+              "cover_letter": "text",
+              "linkedin_url": "string",
+              "portfolio_url": "string",
+              "resume_url": "string",
+              "applied_at": "ISO8601_timestamp"
+            },
+            "job": {
+              "id": "string",
+              "title": "string",
+              "company": "string",
+              "location": "string"
+            },
+            "company": {
+              "id": "string",
+              "name": "string",
+              "employer_email": "string"
+            }
+          }
+        },
+        "workflow_suggestion": {
+          "nodes": [
+            {
+              "type": "webhook",
+              "parameters": {
+                "httpMethod": "POST",
+                "path": "application-received"
+              }
+            },
+            {
+              "type": "set",
+              "parameters": {
+                "values": {
+                  "string": [
+                    {
+                      "name": "application_id",
+                      "value": "={{ $json.data.application.id }}"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "type": "gmail",
+              "parameters": {
+                "toEmail": "={{ $json.data.company.employer_email }}",
+                "subject": "New Application: {{ $json.data.job.title }}",
+                "body": "Hi there,\n\nYou have received a new application for the {{ $json.data.job.title }} position.\n\nCandidate: {{ $json.data.application.candidate_first_name }} {{ $json.data.application.candidate_last_name }}\nEmail: {{ $json.data.application.candidate_email }}\n\nView application: https://recruitpro.com/applications/{{ $json.data.application.id }}\n\nBest regards,\nRecruitPro Team"
+              }
+            }
+          ]
+        }
+      },
+      "payment_completed": {
+        "name": "Payment Completed",
+        "description": "Triggered when an employer completes payment",
+        "path": "/webhook/payment-completed",
+        "method": "POST",
+        "payload_structure": {
+          "event": "payment.completed",
+          "timestamp": "ISO8601_timestamp",
+          "data": {
+            "user": {
+              "id": "string",
+              "email": "string",
+              "first_name": "string",
+              "last_name": "string"
+            },
+            "payment": {
+              "id": "string",
+              "amount": "number",
+              "currency": "string",
+              "plan_tier": "string",
+              "stripe_payment_id": "string"
+            },
+            "company": {
+              "id": "string",
+              "name": "string"
+            }
+          }
+        }
+      },
+      "user_registered": {
+        "name": "User Registered",
+        "description": "Triggered when a new employer registers",
+        "path": "/webhook/user-registered",
+        "method": "POST",
+        "payload_structure": {
+          "event": "user.registered",
+          "timestamp": "ISO8601_timestamp",
+          "data": {
+            "user": {
+              "id": "string",
+              "email": "string",
+              "first_name": "string",
+              "last_name": "string",
+              "plan_tier": "string"
+            },
+            "company": {
+              "id": "string",
+              "name": "string"
+            }
+          }
+        }
+      },
+      "chat_ai": {
+        "name": "AI Chat Assistant",
+        "description": "Webhook for AI-powered chat functionality",
+        "path": "/webhook/fa014f0a-9ace-463a-8fd3-17596faed9c9/chat",
+        "method": "POST",
+        "headers": {
+          "Content-Type": "application/json",
+          "X-RecruitPro-Signature": "webhook_signature_verification"
+        },
+        "payload_structure": {
+          "event": "chat.message",
+          "timestamp": "ISO8601_timestamp",
+          "data": {
+            "message": "string",
+            "user_id": "string",
+            "context": "string",
+            "session_id": "string",
+            "job_position": {
+              "id": "string",
+              "title": "string",
+              "company": "string",
+              "location": "string",
+              "department": "string",
+              "work_type": "string",
+              "salary_range": "string",
+              "description": "text"
+            }
+          }
+        },
+        "workflow_suggestion": {
+          "nodes": [
+            {
+              "type": "webhook",
+              "parameters": {
+                "httpMethod": "POST",
+                "path": "fa014f0a-9ace-463a-8fd3-17596faed9c9/chat"
+              }
+            },
+            {
+              "type": "set",
+              "parameters": {
+                "values": {
+                  "string": [
+                    {
+                      "name": "user_message",
+                      "value": "={{ $json.data.message }}"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "type": "openai",
+              "parameters": {
+                "model": "gpt-3.5-turbo",
+                "messages": "={{ $json.data.message }}"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "environment_variables": {
+      "required": [
+        "N8N_WEBHOOK_URL",
+        "WEBHOOK_SECRET",
+        "SMTP_HOST",
+        "SMTP_PORT",
+        "SMTP_USER",
+        "SMTP_PASSWORD",
+        "FROM_EMAIL"
+      ],
+      "optional": [
+        "SLACK_WEBHOOK_URL",
+        "DISCORD_WEBHOOK_URL",
+        "GOOGLE_ANALYTICS_ID"
+      ]
+    },
+    "security": {
+      "signature_verification": true,
+      "ip_whitelist": [],
+      "rate_limiting": {
+        "enabled": true,
+        "requests_per_minute": 60
+      }
+    },
+    "error_handling": {
+      "retry_attempts": 3,
+      "retry_delay": 1000,
+      "dead_letter_queue": true
+    },
+    "monitoring": {
+      "logging": true,
+      "metrics": true,
+      "alerting": {
+        "slack": false,
+        "email": true,
+        "threshold": "5xx_errors > 10 in 5 minutes"
+      }
+    }
+  },
+  "setup_instructions": {
+    "n8n_workflow_setup": [
+      "1. Create a new workflow in n8n",
+      "2. Add a 'Webhook' node as the trigger",
+      "3. Copy the webhook URL from n8n",
+      "4. Update your application code to call this webhook URL",
+      "5. Add email notification nodes for application alerts",
+      "6. Add error handling and logging nodes",
+      "7. Test the workflow with sample data",
+      "8. Activate the workflow"
+    ],
+    "testing": {
+      "sample_payloads": {
+        "application_received": {
+          "event": "application.submitted",
+          "timestamp": "2024-01-15T10:30:00Z",
+          "data": {
+            "application": {
+              "id": "app_123",
+              "job_posting_id": "job_456",
+              "candidate_email": "candidate@example.com",
+              "candidate_first_name": "Jane",
+              "candidate_last_name": "Smith",
+              "candidate_phone": "+1234567890",
+              "cover_letter": "I am very interested in this position...",
+              "linkedin_url": "https://linkedin.com/in/janesmith",
+              "portfolio_url": "https://janesmith.dev",
+              "resume_url": "https://storage.recruitpro.com/resumes/jane_smith.pdf",
+              "applied_at": "2024-01-15T10:30:00Z"
+            },
+            "job": {
+              "id": "job_456",
+              "title": "Senior Software Engineer",
+              "company": "TechCorp Inc.",
+              "location": "San Francisco, CA"
+            },
+            "company": {
+              "id": "comp_789",
+              "name": "TechCorp Inc.",
+              "employer_email": "hr@techcorp.com"
+            }
+          }
+        }
+      }
+    }
+  },
+  "integration_examples": {
+    "javascript_fetch": {
+      "description": "Example of sending webhook from JavaScript",
+      "code": "async function sendApplicationWebhook(applicationData) {\n    const webhookUrl = process.env.N8N_WEBHOOK_URL;\n    const secret = process.env.WEBHOOK_SECRET;\n    \n    const payload = {\n        event: 'application.submitted',\n        timestamp: new Date().toISOString(),\n        data: applicationData\n    };\n    \n    const signature = generateSignature(payload, secret);\n    \n    const response = await fetch(webhookUrl, {\n        method: 'POST',\n        headers: {\n            'Content-Type': 'application/json',\n            'X-RecruitPro-Signature': signature\n        },\n        body: JSON.stringify(payload)\n    });\n    \n    return response.ok;\n}"
+    },
+    "python_requests": {
+      "description": "Example of sending webhook from Python",
+      "code": "import requests\nimport hmac\nimport hashlib\nimport json\nimport os\nfrom datetime import datetime\n\ndef send_application_webhook(application_data):\n    webhook_url = os.getenv('N8N_WEBHOOK_URL')\n    secret = os.getenv('WEBHOOK_SECRET')\n    \n    payload = {\n        'event': 'application.submitted',\n        'timestamp': datetime.utcnow().isoformat(),\n        'data': application_data\n    }\n    \n    signature = hmac.new(\n        secret.encode(),\n        json.dumps(payload).encode(),\n        hashlib.sha256\n    ).hexdigest()\n    \n    headers = {\n        'Content-Type': 'application/json',\n        'X-RecruitPro-Signature': signature\n    }\n    \n    response = requests.post(webhook_url, json=payload, headers=headers)\n    return response.status_code == 200"
+    }
+  }
+}
